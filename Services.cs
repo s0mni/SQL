@@ -37,7 +37,10 @@ namespace EFProject
             var department = _context.Departments.Include(x => x.Students).Include(y => y.Lectures).FirstOrDefault(d => d.Name == dep.Name);
             if (department != null)
             {
-                department.Students.AddRange(students);
+                if (students != null)
+                {
+                    department.Students.AddRange(students);
+                }
 
                 foreach (var lecture in le)
                 {
@@ -75,7 +78,7 @@ namespace EFProject
 
             var student = _context.Students.FirstOrDefault(s => s.Name == stuName);
             var department = _context.Departments.FirstOrDefault(d => d.Name == dep.Name);
-            if (student == null)
+            if (student == null && department != null)
             {
                 student = new Student();
                 student.Name = stuName;
