@@ -7,7 +7,12 @@ namespace EFProject
 {
     class Services
     {
-        private readonly SchoolContext _context = new SchoolContext();
+        private readonly SchoolContext _context;
+
+        public Services(SchoolContext context)
+        {
+            _context = context;
+        }
 
         public Department CreateDepartment(string depName, List<Student> students, List<Lecture> le)
         {
@@ -54,16 +59,16 @@ namespace EFProject
             }
         }
 
-        public Lecture CreateLecture(Lecture le, List<Department> dep)
+        public Lecture CreateLecture(string leName, List<Department> dep)
         {
-            // le - lectures to create
+            // leName - lectures to create
             // dep - departments to assign the lecture to
 
-            var lecture = _context.Lectures.FirstOrDefault(l => l.Name == le.Name);
+            var lecture = _context.Lectures.FirstOrDefault(l => l.Name == leName);
             if (lecture == null)
             {
                 lecture = new Lecture();
-                lecture.Name = le.Name;
+                lecture.Name = leName;
                 lecture.Departments = dep;
                 _context.Lectures.Add(lecture);
                 _context.SaveChanges();
@@ -131,9 +136,9 @@ namespace EFProject
             } 
         }
 
-        public void ShowStudentLectures(string stuName)
+        public void ShowStudentLectures(Student stuName)
         {
-            var student = _context.Students.FirstOrDefault(s => s.Name == stuName);
+            var student = _context.Students.FirstOrDefault(s => s.Name == stuName.Name);
             var dep = _context.Departments.FirstOrDefault(d => d.Students.Contains(student));
             var lec = _context.Lectures.Where(l => l.Departments.Contains(dep));
             if (student != null && dep != null && lec != null)

@@ -7,7 +7,8 @@ namespace EFProject
     {
         static void Main(string[] args)
         {
-            var services = new Services();
+            var ccontext = new SchoolContext();
+            var services = new Services(ccontext);
 
 
             Console.WriteLine("Done");
